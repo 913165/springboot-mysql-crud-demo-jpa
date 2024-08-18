@@ -5,6 +5,8 @@ import org.example.pbooksapp001.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class BookController {
 
@@ -13,8 +15,8 @@ public class BookController {
 
     // get all books with endpoint /books
     @GetMapping("/books")
-    public String getAllBooks() {
-        return bookService.getAllBooks().toString();
+    public List<Book> getAllBooks() {
+        return bookService.getAllBooks();
     }
 
     // get book by id with endpoint /books/{id}

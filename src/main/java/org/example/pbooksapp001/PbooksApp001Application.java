@@ -17,7 +17,7 @@ public class PbooksApp001Application {
         SpringApplication.run(PbooksApp001Application.class, args);
     }
 
-    @Bean
+   /* @Bean
     public ApplicationRunner applicationRunner(AbstractEnvironment environment) {
         return args -> {
             System.out.println("Application Properties:");
@@ -29,5 +29,5 @@ public class PbooksApp001Application {
                     .forEach(prop -> System.out.println(prop + ": " + environment.getProperty(prop)));
         };
     }
-
+*/
 }

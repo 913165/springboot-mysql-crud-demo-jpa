@@ -5,21 +5,22 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "BOOKS")
+@Table(name = "books")
 public class Book {
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)// auto increment
     private Long id;
     private String title;
-    private String ISBN;
+    @Column(name = "isbn")
+    private String isbn;
     @Column(name = "publicationdate")
     private Date publicationDate;
     @Column(name = "authorname")
     private String authorName;
 
-    public Book(String title, String ISBN, Date publicationDate, String authorName) {
+    public Book(String title, String isbn, Date publicationDate, String authorName) {
         this.title = title;
-        this.ISBN = ISBN;
+        this.isbn = isbn;
         this.publicationDate = publicationDate;
         this.authorName = authorName;
     }
@@ -36,12 +37,12 @@ public class Book {
         this.title = title;
     }
 
-    public String getISBN() {
-        return ISBN;
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     public Date getPublicationDate() {
@@ -64,7 +65,7 @@ public class Book {
     public String toString() {
         return "Book{" +
                 "title='" + title + '\'' +
-                ", ISBN='" + ISBN + '\'' +
+                ", ISBN='" + isbn + '\'' +
                 ", publicationDate=" + publicationDate +
                 ", authorName='" + authorName + '\'' +
                 '}';

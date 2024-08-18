@@ -1,19 +1,17 @@
 package org.example.pbooksapp001.repository;
 
 import org.example.pbooksapp001.model.Book;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.boot.jdbc.EmbeddedDatabaseConnection.H2;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -23,81 +21,78 @@ class BookRepositoryTest {
     private BookRepository bookRepository;
 
     @Test
-    void saveBook() {
-        // Arrange
+    void testSaveBook() {
+        // given
         Book book = new Book("Test Title", "Test ISBN", new Date(), "Test Author");
-        // Act
+        // when
         Book savedBook = bookRepository.save(book);
-        // Assert
-        assertNotNull(savedBook);
-        assertEquals(book.getTitle(), savedBook.getTitle());
-        assertEquals(book.getIsbn(), savedBook.getIsbn());
-        assertEquals(book.getPublicationDate(), savedBook.getPublicationDate());
-        assertEquals(book.getAuthorName(), savedBook.getAuthorName());
-    }
-
-    @Test
-    void findBookById() {
-        // Arrange
-        Book book = new Book("Test Title", "Test ISBN", new Date(), "Test Author");
-        Book savedBook = bookRepository.save(book);
-        // Act
+        // then
         Book foundBook = bookRepository.findById(savedBook.getId()).orElse(null);
-        // Assert
         assertNotNull(foundBook);
-        assertEquals(savedBook.getId(), foundBook.getId());
         assertEquals(savedBook.getTitle(), foundBook.getTitle());
         assertEquals(savedBook.getIsbn(), foundBook.getIsbn());
         assertEquals(savedBook.getPublicationDate(), foundBook.getPublicationDate());
         assertEquals(savedBook.getAuthorName(), foundBook.getAuthorName());
     }
 
-    // find all
     @Test
-    void findAllBooks() {
-        // Arrange
-        Book book1 = new Book("Test Title 1", "Test ISBN 1", new Date(), "Test Author 1");
-        Book book2 = new Book("Test Title 2", "Test ISBN 2", new Date(), "Test Author 2");
-        bookRepository.save(book1);
-        bookRepository.save(book2);
-        // Act
-        Iterable<Book> books = bookRepository.findAll();
-        // Assert
-        assertNotNull(books);
-        assertEquals(2, ((List<Book>) books).size());
-    }
-
-    // update book
-
-    @Test
-    void updateBook() {
-        // Arrange
+    void testDeleteBook() {
+        // given
         Book book = new Book("Test Title", "Test ISBN", new Date(), "Test Author");
         Book savedBook = bookRepository.save(book);
+        // when
+        bookRepository.deleteById(savedBook.getId());
+        // then
+        Book foundBook = bookRepository.findById(savedBook.getId()).orElse(null);
+        assertNull(foundBook);
+    }
+
+    @Test
+    void testUpdateBook() {
+        // given
+        Book book = new Book("Test Title", "Test ISBN", new Date(), "Test Author");
+        Book savedBook = bookRepository.save(book);
+        // when
         savedBook.setTitle("Updated Title");
         savedBook.setIsbn("Updated ISBN");
         savedBook.setPublicationDate(new Date());
         savedBook.setAuthorName("Updated Author");
-        // Act
-        Book updatedBook = bookRepository.save(savedBook);
-        // Assert
-        assertNotNull(updatedBook);
-        assertEquals(savedBook.getId(), updatedBook.getId());
-        assertEquals(savedBook.getTitle(), updatedBook.getTitle());
-        assertEquals(savedBook.getIsbn(), updatedBook.getIsbn());
-        assertEquals(savedBook.getPublicationDate(), updatedBook.getPublicationDate());
-        assertEquals(savedBook.getAuthorName(), updatedBook.getAuthorName());
+        bookRepository.save(savedBook);
+        // then
+        Book foundBook = bookRepository.findById(savedBook.getId()).orElse(null);
+        assertNotNull(foundBook);
+        assertEquals(savedBook.getTitle(), foundBook.getTitle());
+        assertEquals(savedBook.getIsbn(), foundBook.getIsbn());
+        assertEquals(savedBook.getPublicationDate(), foundBook.getPublicationDate());
+        assertEquals(savedBook.getAuthorName(), foundBook.getAuthorName());
     }
-    // delete book
+
     @Test
-    void deleteBook() {
-        // Arrange
+    void testFindAllBooks() {
+        // given
+        Book book1 = new Book("Test Title 1", "Test ISBN 1", new Date(), "Test Author 1");
+        Book book2 = new Book("Test Title 2", "Test ISBN 2", new Date(), "Test Author 2");
+        bookRepository.save(book1);
+        bookRepository.save(book2);
+        // when
+        Iterable<Book> books = bookRepository.findAll();
+        // then
+        assertNotNull(books);
+        assertEquals(2, ((List<Book>) books).size());
+    }
+
+    @Test
+    void testFindBookById() {
+        // given
         Book book = new Book("Test Title", "Test ISBN", new Date(), "Test Author");
         Book savedBook = bookRepository.save(book);
-        // Act
-        bookRepository.deleteById(savedBook.getId());
-        // Assert
-        Book deletedBook = bookRepository.findById(savedBook.getId()).orElse(null);
-        assertEquals(null, deletedBook);
+        // when
+        Book foundBook = bookRepository.findById(savedBook.getId()).orElse(null);
+        // then
+        assertNotNull(foundBook);
+        assertEquals(savedBook.getTitle(), foundBook.getTitle());
+        assertEquals(savedBook.getIsbn(), foundBook.getIsbn());
+        assertEquals(savedBook.getPublicationDate(), foundBook.getPublicationDate());
+        assertEquals(savedBook.getAuthorName(), foundBook.getAuthorName());
     }
 }

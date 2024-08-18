@@ -1,0 +1,35 @@
+# Maven or Gradle build directories
+/target/
+/build/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+
+# Spring Boot specific files
+*.jar
+*.war
+*.ear
+
+# IntelliJ IDEA specific
+/.idea/
+/*.iml
+
+# VS Code specific
+.vscode/
+
+# Eclipse specific
+/.classpath
+/.project
+/.settings/
+/.target/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Test Reports
+/test-results/
